@@ -1,47 +1,88 @@
 #include <iostream>
 #include "Queue.h"
 
+void directions(int& theInt);
+void intInputValidation(int& theInt);
+
 int main() {
     Queue<int> myQueue;
-    std::string answer;
-    int answerTwo;
-    while (answer != "quit"){
-        do{
-            std::cout << "Enter enqueue to add to queue "
-            "dequeue to subtract from queue \n"
-            "peekfront to see first item, "
-            "peekback to see last item, \n"
-            "clear to clear list, "
-            "size to see size of list, "
-            "and quit to quit\n";
+    int input, answer;
+    bool done = false;
+    while (!done){
+        directions(input);
+        intInputValidation(input);
+        switch (input)
+        {
+        case 1:
+            std::cout << "Enter a number to add: ";
             std::cin >> answer;
-        } while ((answer != "enqueue") && (answer != "dequeue") 
-                && (answer != "peekfront") && (answer != "peekback")
-                && (answer != "quit") && (answer != "clear")
-                && (answer != "size"));
-        if (answer == "enqueue"){
-            std::cout << "what number would you like to add?\n";
-            std::cin >> answerTwo;
-            myQueue.enqueue(answerTwo);
-        }
-        else if (answer == "peekfront"){
-            std::cout << "Front item is: " << myQueue.peekFront() 
-            << std::endl;
-        }
-        else if (answer == "peekback"){
-            std::cout << "back item is: " << myQueue.peekBack()
-            << std::endl;
-        }
-        else if (answer == "dequeue"){
-            myQueue.dequeue();
-        }
-        else if (answer == "clear"){
-            myQueue.~Queue();
-        }
-        else{
-            std::cout << "Size of queue is: " << myQueue.size() <<
-            std::endl;
-        }
+            intInputValidation(answer);
+            myQueue.enqueue(answer);
+            break;
 
+        case 2:
+            myQueue.dequeue();
+            break;
+
+        case 3:
+            myQueue.printQueue();
+            break;
+
+        case 4:
+            std::cout << "First item is: ";
+            try
+            {
+                myQueue.peekFront();
+            }
+            catch(const std::logic_error& e)
+            {
+                std::cerr << e.what() << '\n';
+            }
+            break;
+
+        case 5:
+            std::cout << "Last item is: ";
+            try
+            {
+                myQueue.peekBack();
+            }
+            catch(const std::logic_error& e)
+            {
+                std::cerr << e.what() << '\n';
+            }
+            break;
+            
+        case 6:
+            std::cout << "Size of queue is: " << myQueue.size() << std::endl;
+            break;
+        
+        case 7:
+            done = true;
+            break;
+        }
     }
-}   
+}
+
+void directions(int& theInt){
+    std::cout << "-----------------------------------\n"
+                 "To add to the queue press \"1\"\n"
+                 "To remove from the queue press \"2\"\n"
+                 "To print the queue press \"3\"\n"
+                 "To see first item press \"4\"\n"
+                 "To see last item press \"5\"\n"
+                 "To see size of queue press \"6\"\n"
+                 "To quit the program press \"7\"\n"
+                 "-----------------------------------\n";
+                 std::cin >> theInt;
+}
+
+void intInputValidation(int& theInt){
+    while (!std::cin.good() || std::cin.peek() == ' '){
+        std::cout << "ERROR: Incorrect data entered!\n"
+                     "-----------------------------------\n";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max() , '\n');
+        std::cout << "Re-enter number: ";
+        std::cin >> theInt;
+        }
+}

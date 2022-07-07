@@ -17,6 +17,7 @@ class Queue{
     ItemType peekBack();
     bool isEmpty();
     int size();
+    void printQueue();
     ~Queue();
 };
 

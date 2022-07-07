@@ -7,41 +7,50 @@ void Queue<ItemType>::enqueue(ItemType newEntry){
         backPtr = firstPtr;
         ++ItemCount;
     }
-    else if(ItemCount == 1){
-        backPtr = new Node<ItemType>;
-        backPtr->Node::setData(newEntry);
-        backPtr->Node::setNext(nullptr);
-        firstPtr->Node::setNext(backPtr);
-        ++ItemCount;
-    }
     else{
-        NodePtr prevPtr = backPtr;
+        NodePtr tempPtr = backPtr;
         backPtr = new Node<ItemType>;
-        backPtr->Node::setData(newEntry);
-        backPtr->Node::setNext(nullptr);
-        prevPtr->Node::setNext(backPtr);
+        tempPtr->setNext(backPtr);
+        backPtr->setData(newEntry);
+        backPtr->setNext(nullptr);
         ++ItemCount;
     }
-
 }
 
 template <typename ItemType>
 bool Queue<ItemType>::dequeue(){
-    NodePtr deletedNode = firstPtr;
-    firstPtr = firstPtr->getNext();
-    delete deletedNode;
-    --ItemCount;
+    if (!isEmpty()){
+        NodePtr deletedNode = firstPtr;
+        firstPtr = firstPtr->getNext();
+        delete deletedNode;
+        --ItemCount;
+        return true;
+    }
+    else{
+        std::cout << "Your queue is empty!\n";
+        return false;
+    }
 
 }
 
 template <typename ItemType>
 ItemType Queue<ItemType>::peekFront(){
-    return firstPtr->Node::getData();
+    if (!isEmpty()){    
+        return firstPtr->Node::getData();
+    }
+    else{
+        throw std::logic_error("Your queue is empty!");
+    }
 }
 
 template <typename ItemType>
 ItemType Queue<ItemType>::peekBack(){
-    return backPtr->Node::getData();
+    if (!isEmpty()){
+        return backPtr->Node::getData();
+    }
+    else{
+        throw std::logic_error("Your queue is empty!");
+    }
 }
 
 template <typename ItemType>
@@ -57,6 +66,21 @@ bool Queue<ItemType>::isEmpty(){
 template <typename ItemType>
 int Queue<ItemType>::size(){
     return ItemCount;
+}
+
+template <typename ItemType>
+void Queue<ItemType>::printQueue(){
+    NodePtr tempPtr = firstPtr;
+    if(!isEmpty()){
+        while (tempPtr != nullptr)
+        {
+            std::cout << tempPtr->getData();
+            tempPtr = tempPtr->getNext();
+        }
+    }
+    else{
+        std::cout << "Your list is empty!\n";
+    }
 }
 
 template <typename ItemType>
